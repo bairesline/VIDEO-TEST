@@ -4,8 +4,9 @@
     <script src="https://static.opentok.com/v2/js/opentok.js" charset="utf-8"></script>
     <script charset="utf-8">
       var apiKey = '45631692';
-      var sessionId = '2_MX40NTYzMTY5Mn5-MTQ3MDUyNDk5NzIyOX52ZFFTOFo4Sk5PUjlZNnJaV2NOYXd6Y0x-fg';
-      var token = 'T1==cGFydG5lcl9pZD00NTYzMTY5MiZzaWc9MmY1ZGYxODZjMTQ0OWM1NTkzYjliNTQ3ZGVhYTVkZDY3MDFlZDk2ZDpzZXNzaW9uX2lkPTJfTVg0ME5UWXpNVFk1TW41LU1UUTNNRFV5TkRrNU56SXlPWDUyWkZGVE9GbzRTazVQVWpsWk5uSmFWMk5PWVhkNlkweC1mZyZjcmVhdGVfdGltZT0xNDcwNTI0OTc5Jm5vbmNlPTAuNzcyOTE4NTk4MDI3ODk5OSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNDcwNTI4NTc5';
+      var sessionId = '2_MX40NTYzMTY5Mn5-MTQ3MDYwMjY0MzI3MX5DQk9PYW9PNzEzU1lvUlZRV1dUUWFOcXp-UH4';
+      var token = 'T1==cGFydG5lcl9pZD00NTYzMTY5MiZzaWc9MWRmMDczNzU4ZmY4MWY2ZmZiNGQ5ZmU2N2JmYzA4Yzc4ZWY0ODMxNzpzZXNzaW9uX2lkPTJfTVg0ME5UWXpNVFk1TW41LU1UUTNNRFl3TWpZME16STNNWDVEUWs5UFlXOVBOekV6VTFsdlVsWlJWMWRVVVdGT2NYcC1VSDQmY3JlYXRlX3RpbWU9MTQ3MDYwMjY4NiZub25jZT0wLjA2MDYwNTMxNjQyMjg3OTY5NiZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNDcwNjA2Mjg2
+';
       var session = OT.initSession(apiKey, sessionId)
         .on('streamCreated', function(event) {
           session.subscribe(event.stream);
