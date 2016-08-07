@@ -1,1 +1,94 @@
-hhh
+﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://code.oovoo.com/webrtc/oovoosdk-2.1.1.min.js"></script>
+    <script type="text/javascript">
+        var avchatObj = null;
+        var conferenceId = "OOVOO_WEB_RTC2";
+        var appToken = "MDAxMDAxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALXOQ37%2B1283aNpCEj%2FVsJJ%2FmIm4c3hGQNv4lVJrAYEb1P%2BtTMcw3udp4%2FlDIWDSH7UEasWU6e9qBSSZMZU7Jjwz2m4T0UTaKxGQtLCWXWXk1FvAZuDeHEovLpewc%2Fw10%3D";
+        var sessionToken = getQSParam("t");
+        var participantId = getQSParam("pid");
+
+        if (!sessionToken) {
+            //login to get session token
+            participantId = "participant uniqe id";
+            //for example (get random id)
+            participantId = Math.floor(Math.random() * 9999999999) + 1000000000;
+
+            var redirectUrl = "url to send response with the session token"
+            redirectUrl = location.href + "?pid=" + participantId;
+            ooVooClient.authorization({
+                token: appToken,
+                isSandbox: true,
+                userId: participantId,
+                callbackUrl: redirectUrl
+            });
+        }
+        else {
+            ooVooClient.connect({
+                userId: participantId,
+                userToken: sessionToken
+            }, onClientConnected);
+        }
+
+        function onClientConnected(res) {
+            //init conference
+            avchatObj = ooVooClient.AVChat.init({
+                video: true,
+                audio: true,
+                videoResolution: ooVooClient.VideoResolution["HIGH"],
+                videoFrameRate: new Array(5, 15)
+            }, onAVChatInit);
+        }
+
+        function onAVChatInit(res) {
+            if (!res.error) {
+                //register to conference events
+                avchatObj.onParticipantJoined = onParticipantJoined;
+                avchatObj.onParticipantLeft = onParticipantLeft;
+                avchatObj.onConferenceStateChanged = onConferenceStateChanged;
+                avchatObj.onRemoteVideoStateChanged = onRemoteVideoStateChanged
+                avchatObj.join(conferenceId, participantId, "participant name", function (result) { });
+            }
+        }
+
+        function onParticipantLeft(evt) {
+            if (evt.uid) {
+                document.getElementById("vid_" + evt.uid).remove();
+            }
+        }
+        function onParticipantJoined(evt) {
+            if (evt.stream && evt.uid != null) {
+                if (evt.uid == participantId) { //me
+                    document.getElementById("localVideo").src = URL.createObjectURL(evt.stream);
+                }
+                else { //participants
+                    var videoElement = document.createElement("video");
+                    videoElement.id = "vid_" + evt.uid;
+                    videoElement.src = URL.createObjectURL(evt.stream);
+                    videoElement.setAttribute("autoplay", true);
+                    document.body.appendChild(videoElement);
+                }
+            }
+        }
+        function onConferenceStateChanged(evt) {
+        }
+        function onRemoteVideoStateChanged(evt) {
+        }
+
+        function getQSParam(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : results[1].replace(/\+/g, " ");
+        }
+    </script>
+</head>
+<body>
+    <video id="localVideo" style="width:50%; height:auto;" autoplay muted></video>
+</body>
+</html>
